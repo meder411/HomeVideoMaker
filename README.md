@@ -1,6 +1,9 @@
 # Home Video Maker
 
-A simple python utility that wraps the [`exiftool`](https://github.com/smarnach/pyexiftool) package and [`ffmpeg`](https://ffmpeg.org/) to concatenate movies clips into a single movie. Given a folder of clips, this tool automatically sorts the clips based on creation date, super-imposes a timestamp on the bottom-right corners, and merges them into a single movie.
+A simple python utility that wraps the [`exiftool`](https://github.com/smarnach/pyexiftool) package and [`ffmpeg`](https://ffmpeg.org/) to concatenate movies clips into a single movie. Given a folder of clips, this tool automatically sorts the clips based on creation date, super-imposes a timestamp on the bottom-right corners, and merges them into a single movie. 
+
+The purpose is to turn the modern day collection of short smartphone clips into the classic camcorder-style home videos of the 1980's and 1990's.
+
 
 ## Dependencies
 
@@ -9,6 +12,7 @@ This code has been tested on Ubuntu 20.04 with Python 3.6+. Dependencies include
  * `pyexiftool` (clone and install from [Github repo](https://github.com/smarnach/pyexiftool))
  * `ffmpeg` (tested with version 4.2.4)
  * `recordtype` (`pip install recordtype==1.3`)
+
 
 ## How to Use
 

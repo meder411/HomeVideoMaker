@@ -3,7 +3,6 @@ Author: Marc Eder
 Description: A tool to merge captured video clips into longer home movies with camcorder-style data/time overlays
 """
 
-
 import os.path as osp
 import argparse
 import glob
