@@ -7,11 +7,11 @@ from recordtype import recordtype
 Movie = recordtype("Movie", "fname height width create_date rotation")
 
 
-def run_cmd(cmd: str, *args, **kwargs) -> subprocess.CompletedProcess:
+def run_cmd(cmd: str, **kwargs) -> subprocess.CompletedProcess:
     """
     Simple wrapper around subprocess run
     """
-    return subprocess.run(cmd, *args, shell=True, check=True, **kwargs)
+    return subprocess.run(cmd, shell=True, check=True, **kwargs)
 
 
 def parse_datetime_with_tz(exif_date: str) -> datetime.datetime:
@@ -31,7 +31,8 @@ def parse_datetime_with_tz(exif_date: str) -> datetime.datetime:
     return datetime.datetime.combine(d, t)
 
 
-def get_date_info(exif_data: dict) -> datetime.datetime:
+def get_date_info(exif_data: dict,
+                  timestamp_keys: List[str]) -> datetime.datetime:
     """
     Parses the exif data from each video looking for the creation date/time keys
     """
@@ -69,7 +70,7 @@ def create_concat_cmd(movies: List[Movie],
                       out_fname: str,
                       max_dims: Tuple[int, int] = (1920, 1080),
                       overlay_clock: bool = True,
-                      verbosity) -> str:
+                      verbosity: str = "quiet") -> str:
     cmd = "ffmpeg \\\n"
     cmd += "    -y \\\n"
     cmd += f"    -loglevel {verbosity} \\\n"
@@ -115,7 +116,7 @@ def swap_dims(movie: Movie) -> None:
     movie.height = tmp
 
 
-def create_filter_str(movie: Move,
+def create_filter_str(movie: Movie,
                       max_dims: Tuple[int, int],
                       overlay_clock: bool = True) -> str:
     # Open filter string
@@ -193,11 +194,11 @@ def create_filter_str(movie: Move,
     if (movie.width < max_dims[0]) or (movie.height < max_dims[1]):
         filter_str += f"pad=width={max_dims[0]}:height={max_dims[1]}:x={(max_dims[0] - movie.width) // 2}:y={(max_dims[1] - movie.height) // 2}:color=black, "
 
-    filter_str += "setsar=1, "
+    filter_str += "setsar=1"
 
     # Overlay the clock
     if movie.create_date is not None and overlay_clock:
-        filter_str += f"drawtext=expansion=strftime: basetime=$(date +%s -d\"{movie.create_date.date()} {movie.create_date.time()}\")000000 : fontcolor=white : text=\"%^b %d, %Y%n%l\\\\:%M%p\" : fontsize=36 : y={movie.height}-4*lh : x={ movie.width + (max_dims[0] - movie.width) // 2}-text_w-2*max_glyph_w"
+        filter_str += f", drawtext=expansion=strftime: basetime=$(date +%s -d\'{movie.create_date.date()} {movie.create_date.time()}\')000000 : fontcolor=white : text=\'%^b %d, %Y%n%l\\\\:%M%p\' : fontsize=36 : y={movie.height}-4*lh : x={movie.width + (max_dims[0] - movie.width) // 2}-text_w-2*max_glyph_w"
 
     return filter_str
 

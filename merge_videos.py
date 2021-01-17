@@ -100,22 +100,22 @@ def main(args) -> None:
     # Obtain the exif data for each video
     movies = []
     with exiftool.ExifTool() as exif:
-        for vid in clips:
+        for clip in clips:
             # Get all the metadata
-            exif_data = exif.get_metadata(vid)
+            exif_data = exif.get_metadata(clip)
 
             # Extract date info from the metadata
-            date_info = get_date_info(exif_data)
+            date_info = get_date_info(exif_data, timestamp_keys)
 
             if date_info is None:
                 # If none of the keys are found, warn but add the video anyway
                 print(
-                    f"Failed to find creation timestamp key in EXIF data for video `{vid}`! No timestamp will be added and clip may be sorted out of order."
+                    f"Failed to find creation timestamp key in EXIF data for video `{clip}`! No timestamp will be added and clip may be sorted out of order."
                 )
 
             # Create a Movie recordtype and add it to the list
             movies.append(
-                Movie(fname=vid,
+                Movie(fname=clip,
                       height=exif_data["QuickTime:ImageHeight"],
                       width=exif_data["QuickTime:ImageWidth"],
                       create_date=date_info,
@@ -130,14 +130,14 @@ def main(args) -> None:
     print("Done!")
 
     # Check all clips have audio streams
-    print("\n\nChecking that all clips have audio streams.........")
+    print("\nChecking that all clips have audio streams.........")
     check_audio(movies)
     print("Done!")
 
     # Confirm user wants to continue
     user_in = ""
     while user_in != "yes":
-        user_in = input("Do you want to continue merging (yes/no)?: ")
+        user_in = input("\nDo you want to continue merging (yes/no)?: ")
 
         if user_in == "no":
             print("Exiting!")
@@ -161,19 +161,26 @@ def main(args) -> None:
             indexed_out_fname = f"{filename}{i}{ext}"
 
             # Build the concatenation command by parsing the movie info
-            concat_cmd = create_concat_cmd(movies_subset, indexed_out_fname,
-                                           overlay_clock, args.verbosity)
+            concat_cmd = create_concat_cmd(movies_subset,
+                                           indexed_out_fname,
+                                           overlay_clock=overlay_clock,
+                                           verbosity=args.verbosity)
             if args.debug_cmd:
                 print(concat_cmd)
             run_cmd(concat_cmd)
 
     else:
         # Build the concatenation command by parsing the movie info
-        concat_cmd = create_concat_cmd(movies, out_fname, overlay_clock,
-                                       args.verbosity)
+        concat_cmd = create_concat_cmd(movies,
+                                       out_fname,
+                                       overlay_clock=overlay_clock,
+                                       verbosity=args.verbosity)
         if args.debug_cmd:
             print(concat_cmd)
         run_cmd(concat_cmd)
+
+    # Final note that merge worked successfully
+    print("Merging complete!")
 
 
 # =========================================================================== #
@@ -181,5 +188,5 @@ def main(args) -> None:
 # =========================================================================== #
 
 if __name__ == '__main__':
-    args = parse_args()
+    args = parse_arguments()
     main(args)
