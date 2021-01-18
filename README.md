@@ -22,7 +22,7 @@ After installing the above dependencies, you can call the command with:
 python3 merge_videos.py -i INPUT_DIR -o OUTPUT_DIR [-n NUM_PARTS] [--no-date] [-v VERBOSITY] [--debug-cmd]
 ```
 
-This will collect all video clips of supported types (".mp4", ".mov", ".avi"), sort them by creation date, and output a single, merged H.264 mp4 file to `<OUTPUT_DIR/<INPUT_DIR>.mp4`.
+This will collect all video clips of supported types (".mp4", ".mov", ".avi"), sort them by creation date, and output a single, merged H.264 mp4 file to `<OUTPUT_DIR>/<INPUT_DIR>.mp4`.
 
 **Options**
  * `-i`/`--input-dir`: Path to the input directory containing all the clips to merge
