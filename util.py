@@ -172,7 +172,7 @@ def create_filter_str(movie: Movie,
             movie.width = int(movie.width / height_ratio)
             scale = True
     # Case 4: Downscale
-    elif (movie.width < max_dims[0]) and (movie.height < max_dims[1]):
+    elif (movie.width > max_dims[0]) and (movie.height > max_dims[1]):
         width_ratio = movie.width / max_dims[0]
         height_ratio = movie.height / max_dims[1]
         # Downscale based on width
