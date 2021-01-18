@@ -29,5 +29,5 @@ This will collect all video clips of supported types (".mp4", ".mov", ".avi"), s
  * `-o`/`--output-dir`: Path to the output directory where the merges movie(s) will be written
  * `-n`/`--num-parts`: (Optional) How many movies to merge the clips into (default: 1)
  * `--no-date`: (Optional) Include this flag to suppress the date overlay
- * `-v`/`--verbosity`: (Optional) [FFMPEG verbosity levels](https://superuser.com/a/438280) (default)
+ * `-v`/`--verbosity`: (Optional) [FFMPEG verbosity levels](https://superuser.com/a/438280) (default: "quiet")
  * `--debug-cmd`: (Optional) Prints the constructed FFMPEG to console
